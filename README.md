@@ -29,3 +29,9 @@ in this project folder
 cd teamcity
 
 vagrant up
+
+teamcity port 8080
+admin/admin
+
+octopus port 80
+vagrant/Vagrant1
