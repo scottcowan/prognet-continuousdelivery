@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.require_version ">= 1.6.0"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box      = "prognet/winteamcity"
+  config.vm.hostname = "teamcity"
+  config.vm.communicator = "winrm"
+  config.vm.network "private_network", ip: "172.28.128.3"
+  #config.vm.network "private_network", type: "dhcp"
+
+  config.windows.set_work_network = true
+
+  config.vm.network :forwarded_port, guest: 3389, host: 3389
+  config.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
+  config.vm.network :forwarded_port, guest: 22, host: 2222
+
+  config.vm.provider :virtualbox do |vb|
+    #vb.gui = true
+    vb.customize ["modifyvm", :id, "--memory", 768]
+    vb.customize ["modifyvm", :id, "--cpus", 1]
+    vb.customize ["modifyvm", :id, "--vram", "32"]
+    vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+    vb.customize ["setextradata", "global", "GUI/SuppressMessages", "all" ]
+  end
+end
